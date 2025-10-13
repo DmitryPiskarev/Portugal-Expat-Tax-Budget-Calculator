@@ -77,12 +77,17 @@ def index() -> rx.Component:
             ),
             rx.el.div(
                 rx.el.div(
-                    income_input(), output_display(), class_name="flex flex-col gap-8"
+                    income_input(),
+                    output_display(),
+                    class_name="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start",
                 ),
+                rx.el.div(class_name="py-4 lg:py-6"),
                 rx.el.div(
-                    expenses_input(), budget_output(), class_name="flex flex-col gap-8"
+                    expenses_input(),
+                    budget_output(),
+                    class_name="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start",
                 ),
-                class_name="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto items-start",
+                class_name="flex flex-col max-w-6xl mx-auto",
             ),
             class_name="container mx-auto px-4",
         ),
