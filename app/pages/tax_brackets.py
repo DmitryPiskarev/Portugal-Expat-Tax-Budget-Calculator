@@ -7,16 +7,18 @@ def tax_brackets_page() -> rx.Component:
 
     def bracket_row(bracket: dict, index: int) -> rx.Component:
         lower_bound = rx.cond(
-            index == 0, 0, CalculatorState.irs_brackets[index - 1]["limit"]
+            index == 0,
+            "0",
+            CalculatorState.irs_brackets[index - 1]["limit"].to_string(),
         )
         upper_bound = rx.cond(
             bracket["limit"] == float("inf"),
             " and above",
-            f" - €{str(bracket['limit'])}",
+            rx.text.strong(" - €", bracket["limit"]),
         )
         return rx.el.tr(
             rx.el.td(
-                f"€{lower_bound.to_string()}{upper_bound}",
+                rx.text.strong("€", lower_bound, upper_bound),
                 class_name="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900",
             ),
             rx.el.td(

@@ -10,6 +10,7 @@ class AuthState(rx.State):
     def sign_up(self, form_data: dict):
         if form_data["email"] in USERS:
             yield rx.toast("Email already in use", duration=3000)
+            return
         else:
             USERS[form_data["email"]] = form_data["password"]
             self.in_session = True

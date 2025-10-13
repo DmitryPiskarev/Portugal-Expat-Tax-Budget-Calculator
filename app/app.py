@@ -6,6 +6,7 @@ from app.components.output_display import output_display
 from app.pages.sign_in import sign_in
 from app.pages.sign_up import sign_up
 from app.pages.tax_brackets import tax_brackets_page
+from app.pages.tax_info import tax_info_page
 
 
 def navigation_item(text: str, href: str) -> rx.Component:
@@ -41,6 +42,7 @@ def app_header() -> rx.Component:
                 rx.el.nav(
                     navigation_item("Calculator", "/"),
                     navigation_item("Tax Brackets", "/tax-brackets"),
+                    navigation_item("Tax Info", "/tax-info"),
                     class_name="flex items-center gap-2",
                 ),
             ),
@@ -100,3 +102,4 @@ app.add_page(index, on_load=AuthState.check_session, route="/")
 app.add_page(sign_in, route="/sign-in")
 app.add_page(sign_up, route="/sign-up")
 app.add_page(tax_brackets_page, route="/tax-brackets", on_load=AuthState.check_session)
+app.add_page(tax_info_page, route="/tax-info", on_load=AuthState.check_session)

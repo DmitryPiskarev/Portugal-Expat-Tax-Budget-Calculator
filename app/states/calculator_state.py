@@ -168,15 +168,21 @@ class CalculatorState(rx.State):
 
     @rx.var
     def budget_chart_data(self) -> list[dict[str, str | float]]:
+        colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#a4de6c", "#d0ed57"]
         data = [
-            {"name": category.capitalize(), "value": round(value, 2)}
-            for category, value in self.expenses.items()
+            {
+                "name": category.capitalize(),
+                "value": round(value, 2),
+                "fill": colors[i % len(colors)],
+            }
+            for i, (category, value) in enumerate(self.expenses.items())
         ]
         if self.estimated_net_after_expenses > 0:
             data.append(
                 {
                     "name": "Savings",
                     "value": round(self.estimated_net_after_expenses, 2),
+                    "fill": "#4caf50",
                 }
             )
         return data

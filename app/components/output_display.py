@@ -11,13 +11,16 @@ def budget_chart() -> rx.Component:
         rx.recharts.responsive_container(
             rx.recharts.pie_chart(
                 rx.recharts.pie(
+                    rx.foreach(
+                        CalculatorState.budget_chart_data,
+                        lambda item: rx.recharts.cell(fill=item["fill"].to(str)),
+                    ),
                     data=CalculatorState.budget_chart_data,
                     data_key="value",
                     name_key="name",
                     cx="50%",
                     cy="50%",
                     outer_radius=80,
-                    fill="#8884d8",
                     label=True,
                 ),
                 rx.recharts.tooltip(),
