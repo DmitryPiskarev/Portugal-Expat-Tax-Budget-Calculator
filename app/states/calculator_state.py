@@ -22,15 +22,13 @@ class CalculatorState(rx.State):
     income_coefficient: float = 0.75
     show_advanced: bool = False
     irs_brackets: list[TaxBracket] = [
-        {"limit": 7703, "rate": 0.1325},
-        {"limit": 11623, "rate": 0.18},
-        {"limit": 16472, "rate": 0.23},
-        {"limit": 21321, "rate": 0.26},
-        {"limit": 27146, "rate": 0.3275},
-        {"limit": 39791, "rate": 0.37},
-        {"limit": 51997, "rate": 0.435},
-        {"limit": 81199, "rate": 0.45},
-        {"limit": float("inf"), "rate": 0.48},
+        {"limit": 8059, "rate": 0.13},
+        {"limit": 12160, "rate": 0.165},
+        {"limit": 17233, "rate": 0.22},
+        {"limit": 22306, "rate": 0.25},
+        {"limit": 28400, "rate": 0.32},
+        {"limit": 28810, "rate": 0.355},
+        {"limit": float("inf"), "rate": 0.355},
     ]
 
     @rx.event
@@ -75,15 +73,18 @@ class CalculatorState(rx.State):
 
     @rx.var
     def taxable_income(self) -> float:
-        return self.annual_gross_income * self.income_coefficient
+        g = self.annual_gross_income
+        return g * self.income_coefficient - g * 0.7 * self.ss_rate
 
     @rx.var
     def social_security_due(self) -> float:
-        return self.annual_gross_income * self.ss_rate
+        return self.annual_gross_income * 0.7 * self.ss_rate
 
     @rx.var
     def irs_due(self) -> float:
         income = self.taxable_income
+        if income <= 0:
+            return 0.0
         total_tax = 0.0
         lower_bound = 0.0
         for bracket in self.irs_brackets:
