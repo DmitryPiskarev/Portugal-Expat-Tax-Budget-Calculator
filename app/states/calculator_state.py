@@ -131,11 +131,52 @@ class CalculatorState(rx.State):
         return 0.0
 
     @rx.var
+    def monthly_take_home_pay_formatted(self) -> str:
+        return f"{self.monthly_take_home_pay:.2f}"
+
+    @rx.var
+    def annual_take_home_pay_formatted(self) -> str:
+        return f"{self.annual_take_home_pay:.2f}"
+
+    @rx.var
+    def effective_tax_rate_formatted(self) -> str:
+        return f"{self.effective_tax_rate:.2f}"
+
+    @rx.var
+    def savings_rate_formatted(self) -> str:
+        return f"{self.savings_rate:.2f}"
+
+    @rx.var
+    def irs_due_formatted(self) -> str:
+        return f"{self.irs_due:.2f}"
+
+    @rx.var
+    def social_security_due_formatted(self) -> str:
+        return f"{self.social_security_due:.2f}"
+
+    @rx.var
+    def total_tax_due_formatted(self) -> str:
+        return f"{self.total_tax_due:.2f}"
+
+    @rx.var
+    def total_monthly_expenses_formatted(self) -> str:
+        return f"{self.total_monthly_expenses:.2f}"
+
+    @rx.var
+    def estimated_net_after_expenses_formatted(self) -> str:
+        return f"{self.estimated_net_after_expenses:.2f}"
+
+    @rx.var
     def budget_chart_data(self) -> list[dict[str, str | float]]:
         data = [
-            {"name": category.capitalize(), "value": value}
+            {"name": category.capitalize(), "value": round(value, 2)}
             for category, value in self.expenses.items()
         ]
         if self.estimated_net_after_expenses > 0:
-            data.append({"name": "Savings", "value": self.estimated_net_after_expenses})
+            data.append(
+                {
+                    "name": "Savings",
+                    "value": round(self.estimated_net_after_expenses, 2),
+                }
+            )
         return data

@@ -39,11 +39,11 @@ def output_display() -> rx.Component:
             ),
             rx.el.p(
                 "€",
-                rx.text.strong(f"{CalculatorState.monthly_take_home_pay.to_string()}"),
+                rx.text.strong(f"{CalculatorState.monthly_take_home_pay_formatted}"),
                 class_name="text-4xl font-bold text-gray-800 mt-2",
             ),
             rx.el.p(
-                f"€{CalculatorState.annual_take_home_pay.to_string()} annually",
+                f"€{CalculatorState.annual_take_home_pay_formatted} annually",
                 class_name="text-sm text-gray-500 mt-1",
             ),
             class_name="bg-violet-50 border-violet-200",
@@ -51,12 +51,12 @@ def output_display() -> rx.Component:
         rx.el.div(
             metric_card(
                 "Effective Tax Rate",
-                f"{CalculatorState.effective_tax_rate.to_string()}%",
+                f"{CalculatorState.effective_tax_rate_formatted}%",
                 "percent",
             ),
             metric_card(
                 "Savings Rate",
-                f"{CalculatorState.savings_rate.to_string()}%",
+                f"{CalculatorState.savings_rate_formatted}%",
                 "piggy-bank",
             ),
             class_name="grid grid-cols-2 gap-4",
@@ -70,7 +70,7 @@ def output_display() -> rx.Component:
                 rx.el.div(
                     rx.el.p("IRS (Income Tax)", class_name="text-sm text-gray-600"),
                     rx.el.p(
-                        f"€{CalculatorState.irs_due.to_string()}",
+                        f"€{CalculatorState.irs_due_formatted}",
                         class_name="font-semibold text-gray-800",
                     ),
                     class_name="flex justify-between items-center py-2",
@@ -78,7 +78,7 @@ def output_display() -> rx.Component:
                 rx.el.div(
                     rx.el.p("Social Security", class_name="text-sm text-gray-600"),
                     rx.el.p(
-                        f"€{CalculatorState.social_security_due.to_string()}",
+                        f"€{CalculatorState.social_security_due_formatted}",
                         class_name="font-semibold text-gray-800",
                     ),
                     class_name="flex justify-between items-center py-2 border-t border-gray-100",
@@ -86,7 +86,7 @@ def output_display() -> rx.Component:
                 rx.el.div(
                     rx.el.p("Total Tax", class_name="text-sm font-bold text-gray-700"),
                     rx.el.p(
-                        f"€{CalculatorState.total_tax_due.to_string()}",
+                        f"€{CalculatorState.total_tax_due_formatted}",
                         class_name="font-bold text-gray-900",
                     ),
                     class_name="flex justify-between items-center py-2 border-t border-gray-200 mt-2",
@@ -102,7 +102,7 @@ def output_display() -> rx.Component:
                 rx.el.div(
                     rx.el.p("Total Expenses", class_name="text-sm text-gray-600"),
                     rx.el.p(
-                        f"€{CalculatorState.total_monthly_expenses.to_string()}",
+                        f"€{CalculatorState.total_monthly_expenses_formatted}",
                         class_name="font-semibold text-gray-800",
                     ),
                     class_name="flex justify-between items-center py-2",
@@ -113,7 +113,7 @@ def output_display() -> rx.Component:
                         class_name="text-sm font-bold text-gray-700",
                     ),
                     rx.el.p(
-                        f"€{CalculatorState.estimated_net_after_expenses.to_string()}",
+                        f"€{CalculatorState.estimated_net_after_expenses_formatted}",
                         class_name=rx.cond(
                             CalculatorState.estimated_net_after_expenses >= 0,
                             "font-bold text-green-600",

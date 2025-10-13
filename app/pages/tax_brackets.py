@@ -11,7 +11,7 @@ def tax_brackets_page() -> rx.Component:
         )
         upper_bound = rx.cond(
             bracket["limit"] == float("inf"),
-            "and above",
+            " and above",
             f" - €{str(bracket['limit'])}",
         )
         return rx.el.tr(

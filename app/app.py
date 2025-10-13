@@ -9,7 +9,9 @@ from app.pages.tax_brackets import tax_brackets_page
 
 
 def navigation_item(text: str, href: str) -> rx.Component:
-    is_active = AuthState.router.page.path == href
+    is_active = (AuthState.router.page.path == href) | (href == "/") & (
+        AuthState.router.page.path == ""
+    )
     return rx.el.a(
         text,
         href=href,
