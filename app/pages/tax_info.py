@@ -40,13 +40,25 @@ def tax_info_page() -> rx.Component:
             info_section(
                 "Social Security (Segurança Social)",
                 rx.el.p(
-                    "As a freelancer, you are required to make social security contributions. The standard rate is 21.4%."
+                    "As a freelancer in Portugal, you are generally required to make social security contributions. The standard rate for self-employed individuals is 21.4%."
                 ),
                 rx.el.p(
-                    "Contributions are calculated on a 'relevant income' which is typically 70% of the average income from the previous 3-month period. For the first year, there are specific rules, but this calculator uses a simplified estimation based on current income to provide a projection."
+                    "Contributions are calculated based on your 'relevant income,' which is typically 70% of the gross income from the previous quarter. This calculator uses a simplified estimation based on your current monthly income to project your annual liability."
                 ),
-                rx.el.p(
-                    "There's an exemption from Social Security payments for the first 12 months of activity."
+                rx.el.ul(
+                    rx.el.li(
+                        rx.text.strong("First-Year Exemption: "),
+                        "New freelancers are exempt from social security payments for the first 12 months of their activity.",
+                    ),
+                    rx.el.li(
+                        rx.text.strong("Contribution Base: "),
+                        "The contribution is not on your full gross income but on a determined percentage (usually 70%).",
+                    ),
+                    rx.el.li(
+                        rx.text.strong("Default Rate: "),
+                        "This calculator defaults to the standard 21.4% rate, which you can adjust in the 'Advanced Options' on the main calculator page.",
+                    ),
+                    class_name="list-disc list-inside space-y-2 mt-2",
                 ),
             ),
             info_section(
