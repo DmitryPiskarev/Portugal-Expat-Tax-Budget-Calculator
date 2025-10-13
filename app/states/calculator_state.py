@@ -27,8 +27,10 @@ class CalculatorState(rx.State):
         {"limit": 17233, "rate": 0.22},
         {"limit": 22306, "rate": 0.25},
         {"limit": 28400, "rate": 0.32},
-        {"limit": 28810, "rate": 0.355},
-        {"limit": float("inf"), "rate": 0.355},
+        {"limit": 41629, "rate": 0.355},
+        {"limit": 44987, "rate": 0.435},
+        {"limit": 83696, "rate": 0.45},
+        {"limit": float("inf"), "rate": 0.48},
     ]
 
     @rx.event

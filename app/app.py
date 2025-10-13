@@ -8,6 +8,19 @@ from app.pages.sign_up import sign_up
 from app.pages.tax_brackets import tax_brackets_page
 
 
+def navigation_item(text: str, href: str) -> rx.Component:
+    is_active = AuthState.router.page.path == href
+    return rx.el.a(
+        text,
+        href=href,
+        class_name=rx.cond(
+            is_active,
+            "px-3 py-2 rounded-md bg-violet-100 text-violet-700 font-medium text-sm",
+            "px-3 py-2 rounded-md text-gray-500 hover:bg-gray-100 hover:text-gray-700 font-medium text-sm",
+        ),
+    )
+
+
 def app_header() -> rx.Component:
     return rx.el.header(
         rx.el.div(
@@ -24,12 +37,9 @@ def app_header() -> rx.Component:
                     href="/",
                 ),
                 rx.el.nav(
-                    rx.el.a(
-                        "Tax Brackets 2025",
-                        href="/tax-brackets",
-                        class_name="text-gray-600 hover:text-violet-700 font-medium",
-                    ),
-                    class_name="flex items-center gap-6",
+                    navigation_item("Calculator", "/"),
+                    navigation_item("Tax Brackets", "/tax-brackets"),
+                    class_name="flex items-center gap-2",
                 ),
             ),
             rx.cond(
