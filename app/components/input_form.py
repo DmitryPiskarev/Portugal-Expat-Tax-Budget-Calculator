@@ -88,11 +88,11 @@ def advanced_options() -> rx.Component:
 
 
 def input_form() -> rx.Component:
-    return card(
-        rx.el.h2(
-            "Your Finances", class_name="text-lg font-semibold text-gray-800 mb-4"
-        ),
-        rx.el.div(
+    return rx.el.div(
+        card(
+            rx.el.h2(
+                "Monthly Income", class_name="text-lg font-semibold text-gray-800 mb-4"
+            ),
             input_field(
                 label="Monthly Gross Income",
                 icon="landmark",
@@ -101,12 +101,14 @@ def input_form() -> rx.Component:
                 type="number",
                 placeholder="e.g. 5000.00",
             ),
-            class_name="mb-6",
+            advanced_options(),
         ),
-        rx.el.h3(
-            "Monthly Expenses", class_name="text-md font-semibold text-gray-800 mb-4"
+        card(
+            rx.el.h3(
+                "Monthly Expenses",
+                class_name="text-md font-semibold text-gray-800 mb-4",
+            ),
+            expense_inputs(),
         ),
-        expense_inputs(),
-        advanced_options(),
-        class_name="flex flex-col gap-2",
+        class_name="flex flex-col gap-8",
     )

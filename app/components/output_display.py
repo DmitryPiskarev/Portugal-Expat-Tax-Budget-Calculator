@@ -32,7 +32,7 @@ def budget_chart() -> rx.Component:
     )
 
 
-def output_display() -> rx.Component:
+def results_section() -> rx.Component:
     return rx.el.div(
         rx.el.h2("Your Results", class_name="text-lg font-semibold text-gray-800 mb-4"),
         card(
@@ -51,18 +51,10 @@ def output_display() -> rx.Component:
             ),
             class_name="bg-violet-50 border-violet-200",
         ),
-        rx.el.div(
-            metric_card(
-                "Effective Tax Rate",
-                f"{CalculatorState.effective_tax_rate_formatted}%",
-                "percent",
-            ),
-            metric_card(
-                "Savings Rate",
-                f"{CalculatorState.savings_rate_formatted}%",
-                "piggy-bank",
-            ),
-            class_name="grid grid-cols-2 gap-4",
+        metric_card(
+            "Effective Tax Rate",
+            f"{CalculatorState.effective_tax_rate_formatted}%",
+            "percent",
         ),
         card(
             rx.el.h3(
@@ -96,37 +88,58 @@ def output_display() -> rx.Component:
                 ),
             ),
         ),
-        card(
-            rx.el.h3(
-                "Budget Summary (Monthly)",
-                class_name="text-md font-semibold text-gray-800 mb-4",
+        class_name="flex flex-col gap-4",
+    )
+
+
+def budget_section() -> rx.Component:
+    return rx.el.div(
+        rx.el.h2("Your Budget", class_name="text-lg font-semibold text-gray-800 mb-4"),
+        rx.el.div(
+            metric_card(
+                "Savings Rate",
+                f"{CalculatorState.savings_rate_formatted}%",
+                "piggy-bank",
             ),
-            rx.el.div(
-                rx.el.div(
-                    rx.el.p("Total Expenses", class_name="text-sm text-gray-600"),
-                    rx.el.p(
-                        f"€{CalculatorState.total_monthly_expenses_formatted}",
-                        class_name="font-semibold text-gray-800",
-                    ),
-                    class_name="flex justify-between items-center py-2",
+            card(
+                rx.el.h3(
+                    "Budget Summary (Monthly)",
+                    class_name="text-md font-semibold text-gray-800 mb-4",
                 ),
                 rx.el.div(
-                    rx.el.p(
-                        "Net After Expenses",
-                        class_name="text-sm font-bold text-gray-700",
-                    ),
-                    rx.el.p(
-                        f"€{CalculatorState.estimated_net_after_expenses_formatted}",
-                        class_name=rx.cond(
-                            CalculatorState.estimated_net_after_expenses >= 0,
-                            "font-bold text-green-600",
-                            "font-bold text-red-600",
+                    rx.el.div(
+                        rx.el.p("Total Expenses", class_name="text-sm text-gray-600"),
+                        rx.el.p(
+                            f"€{CalculatorState.total_monthly_expenses_formatted}",
+                            class_name="font-semibold text-gray-800",
                         ),
+                        class_name="flex justify-between items-center py-2",
                     ),
-                    class_name="flex justify-between items-center py-2 border-t border-gray-200 mt-2",
+                    rx.el.div(
+                        rx.el.p(
+                            "Net After Expenses",
+                            class_name="text-sm font-bold text-gray-700",
+                        ),
+                        rx.el.p(
+                            f"€{CalculatorState.estimated_net_after_expenses_formatted}",
+                            class_name=rx.cond(
+                                CalculatorState.estimated_net_after_expenses >= 0,
+                                "font-bold text-green-600",
+                                "font-bold text-red-600",
+                            ),
+                        ),
+                        class_name="flex justify-between items-center py-2 border-t border-gray-200 mt-2",
+                    ),
                 ),
             ),
+            class_name="grid grid-cols-1 gap-4",
         ),
         budget_chart(),
         class_name="flex flex-col gap-4",
+    )
+
+
+def output_display() -> rx.Component:
+    return rx.el.div(
+        results_section(), budget_section(), class_name="flex flex-col gap-8"
     )
