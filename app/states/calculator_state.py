@@ -1,0 +1,138 @@
+import reflex as rx
+from typing import TypedDict
+import logging
+
+
+class TaxBracket(TypedDict):
+    limit: float
+    rate: float
+
+
+class CalculatorState(rx.State):
+    gross_income: float = 5000.0
+    expenses: dict[str, float] = {
+        "housing": 1200.0,
+        "food": 400.0,
+        "transport": 150.0,
+        "utilities": 100.0,
+        "leisure": 250.0,
+        "others": 100.0,
+    }
+    ss_rate: float = 0.214
+    income_coefficient: float = 0.75
+    show_advanced: bool = False
+    irs_brackets: list[TaxBracket] = [
+        {"limit": 7703, "rate": 0.1325},
+        {"limit": 11623, "rate": 0.18},
+        {"limit": 16472, "rate": 0.23},
+        {"limit": 21321, "rate": 0.26},
+        {"limit": 27146, "rate": 0.3275},
+        {"limit": 39791, "rate": 0.37},
+        {"limit": 51997, "rate": 0.435},
+        {"limit": 81199, "rate": 0.45},
+        {"limit": float("inf"), "rate": 0.48},
+    ]
+
+    @rx.event
+    def set_gross_income(self, value: str):
+        try:
+            self.gross_income = float(value) if value else 0.0
+        except ValueError as e:
+            logging.exception(f"Error parsing gross income: {e}")
+            self.gross_income = 0.0
+
+    @rx.event
+    def set_expense(self, category: str, value: str):
+        try:
+            self.expenses[category] = float(value) if value else 0.0
+        except ValueError as e:
+            logging.exception(f"Error parsing expense for {category}: {e}")
+            self.expenses[category] = 0.0
+
+    @rx.event
+    def set_ss_rate(self, value: str):
+        try:
+            self.ss_rate = float(value) / 100 if value else 0.0
+        except ValueError as e:
+            logging.exception(f"Error parsing SS rate: {e}")
+            self.ss_rate = 0.0
+
+    @rx.event
+    def set_income_coefficient(self, value: str):
+        try:
+            self.income_coefficient = float(value) / 100 if value else 0.0
+        except ValueError as e:
+            logging.exception(f"Error parsing income coefficient: {e}")
+            self.income_coefficient = 0.0
+
+    @rx.event
+    def toggle_advanced(self):
+        self.show_advanced = not self.show_advanced
+
+    @rx.var
+    def annual_gross_income(self) -> float:
+        return self.gross_income * 12
+
+    @rx.var
+    def taxable_income(self) -> float:
+        return self.annual_gross_income * self.income_coefficient
+
+    @rx.var
+    def social_security_due(self) -> float:
+        return self.annual_gross_income * self.ss_rate
+
+    @rx.var
+    def irs_due(self) -> float:
+        income = self.taxable_income
+        total_tax = 0.0
+        lower_bound = 0.0
+        for bracket in self.irs_brackets:
+            if income > lower_bound:
+                taxable_at_rate = min(income, bracket["limit"]) - lower_bound
+                total_tax += taxable_at_rate * bracket["rate"]
+                lower_bound = bracket["limit"]
+            else:
+                break
+        return total_tax
+
+    @rx.var
+    def total_tax_due(self) -> float:
+        return self.irs_due + self.social_security_due
+
+    @rx.var
+    def effective_tax_rate(self) -> float:
+        if self.annual_gross_income > 0:
+            return self.total_tax_due / self.annual_gross_income * 100
+        return 0.0
+
+    @rx.var
+    def annual_take_home_pay(self) -> float:
+        return self.annual_gross_income - self.total_tax_due
+
+    @rx.var
+    def monthly_take_home_pay(self) -> float:
+        return self.annual_take_home_pay / 12
+
+    @rx.var
+    def total_monthly_expenses(self) -> float:
+        return sum(self.expenses.values())
+
+    @rx.var
+    def estimated_net_after_expenses(self) -> float:
+        return self.monthly_take_home_pay - self.total_monthly_expenses
+
+    @rx.var
+    def savings_rate(self) -> float:
+        if self.monthly_take_home_pay > 0:
+            return self.estimated_net_after_expenses / self.monthly_take_home_pay * 100
+        return 0.0
+
+    @rx.var
+    def budget_chart_data(self) -> list[dict[str, str | float]]:
+        data = [
+            {"name": category.capitalize(), "value": value}
+            for category, value in self.expenses.items()
+        ]
+        if self.estimated_net_after_expenses > 0:
+            data.append({"name": "Savings", "value": self.estimated_net_after_expenses})
+        return data
