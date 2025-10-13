@@ -140,6 +140,8 @@ def budget_section() -> rx.Component:
 
 
 def output_display() -> rx.Component:
-    return rx.el.div(
-        results_section(), budget_section(), class_name="flex flex-col gap-8"
-    )
+    return rx.el.div(results_section(), class_name="flex flex-col gap-4")
+
+
+def budget_output() -> rx.Component:
+    return rx.el.div(budget_section(), class_name="flex flex-col gap-4")

@@ -71,6 +71,17 @@ def tax_info_page() -> rx.Component:
                 ),
             ),
             info_section(
+                "Important Note on Tax Regimes",
+                rx.el.p(
+                    "This calculator is specifically designed for freelancers under the ",
+                    rx.text.strong("simplified tax regime"),
+                    ". Portugal has other tax regimes, such as organized accounting (contabilidade organizada), which may be mandatory or beneficial depending on your income level and business complexity.",
+                ),
+                rx.el.p(
+                    "The simplified regime is generally available for freelancers with an annual gross income below €200,000. Above this threshold, organized accounting is usually required."
+                ),
+            ),
+            info_section(
                 "Disclaimer",
                 rx.el.p(
                     "This calculator provides an estimation for informational purposes only. It is not financial advice. Tax laws can change and individual circumstances vary. Always consult with a qualified accountant or tax advisor in Portugal for accurate financial planning."

@@ -1,8 +1,7 @@
 import reflex as rx
-from app.states.calculator_state import CalculatorState
 from app.states.auth_state import AuthState
-from app.components.input_form import input_form
-from app.components.output_display import output_display
+from app.components.input_form import income_input, expenses_input
+from app.components.output_display import output_display, budget_output
 from app.pages.sign_in import sign_in
 from app.pages.sign_up import sign_up
 from app.pages.tax_brackets import tax_brackets_page
@@ -77,8 +76,12 @@ def index() -> rx.Component:
                 class_name="py-8",
             ),
             rx.el.div(
-                input_form(),
-                output_display(),
+                rx.el.div(
+                    income_input(), output_display(), class_name="flex flex-col gap-8"
+                ),
+                rx.el.div(
+                    expenses_input(), budget_output(), class_name="flex flex-col gap-8"
+                ),
                 class_name="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto items-start",
             ),
             class_name="container mx-auto px-4",
