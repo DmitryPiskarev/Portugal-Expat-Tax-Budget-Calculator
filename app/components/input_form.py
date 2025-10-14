@@ -89,7 +89,7 @@ def advanced_options() -> rx.Component:
                                 ),
                                 class_name="flex items-center text-sm font-medium text-gray-700 cursor-pointer",
                             ),
-                            label="This coefficient is for the simplified tax regime.",
+                            content="This coefficient is for the simplified tax regime.",
                         ),
                         rx.el.input(
                             default_value=(

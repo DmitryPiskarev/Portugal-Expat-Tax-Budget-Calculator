@@ -86,7 +86,7 @@ def results_section() -> rx.Component:
                             ),
                             class_name="flex justify-between items-center w-full",
                         ),
-                        label=f"Annual Gross x {CalculatorState.ss_base_coefficient * 100:.1f}% x {CalculatorState.ss_rate * 100:.1f}%",
+                        content=f"Annual Gross x {CalculatorState.ss_base_coefficient * 100:.1f}% x {CalculatorState.ss_rate * 100:.1f}%",
                     ),
                     class_name="py-2 border-t border-gray-100",
                 ),
