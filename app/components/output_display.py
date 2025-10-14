@@ -71,12 +71,24 @@ def results_section() -> rx.Component:
                     class_name="flex justify-between items-center py-2",
                 ),
                 rx.el.div(
-                    rx.el.p("Social Security", class_name="text-sm text-gray-600"),
-                    rx.el.p(
-                        f"€{CalculatorState.social_security_due_formatted}",
-                        class_name="font-semibold text-gray-800",
+                    rx.tooltip(
+                        rx.el.div(
+                            rx.el.p(
+                                "Social Security",
+                                rx.icon(
+                                    "info", size=12, class_name="ml-1 text-gray-500"
+                                ),
+                                class_name="flex items-center text-sm text-gray-600 cursor-pointer",
+                            ),
+                            rx.el.p(
+                                f"€{CalculatorState.social_security_due_formatted}",
+                                class_name="font-semibold text-gray-800",
+                            ),
+                            class_name="flex justify-between items-center w-full",
+                        ),
+                        label=f"Annual Gross x {CalculatorState.ss_base_coefficient * 100:.1f}% x {CalculatorState.ss_rate * 100:.1f}%",
                     ),
-                    class_name="flex justify-between items-center py-2 border-t border-gray-100",
+                    class_name="py-2 border-t border-gray-100",
                 ),
                 rx.el.div(
                     rx.el.p("Total Tax", class_name="text-sm font-bold text-gray-700"),

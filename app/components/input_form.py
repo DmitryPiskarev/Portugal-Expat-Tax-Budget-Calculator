@@ -52,38 +52,58 @@ def advanced_options() -> rx.Component:
             CalculatorState.show_advanced,
             rx.el.div(
                 rx.el.div(
-                    rx.el.label(
-                        "Social Security %",
-                        class_name="text-sm font-medium text-gray-700",
-                    ),
-                    rx.el.input(
-                        default_value=(CalculatorState.ss_rate * 100).to_string(),
-                        on_change=CalculatorState.set_ss_rate,
-                        class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500",
-                        type="number",
-                    ),
-                    class_name="w-full",
-                ),
-                rx.el.div(
-                    rx.tooltip(
+                    rx.el.div(
                         rx.el.label(
-                            "D8 Income Coefficient %",
-                            rx.icon("info", size=12, class_name="ml-1 text-gray-500"),
-                            class_name="flex items-center text-sm font-medium text-gray-700 cursor-pointer",
+                            "Social Security %",
+                            class_name="text-sm font-medium text-gray-700",
                         ),
-                        label="This coefficient is for the simplified tax regime.",
+                        rx.el.input(
+                            default_value=(CalculatorState.ss_rate * 100).to_string(),
+                            on_change=CalculatorState.set_ss_rate,
+                            class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500",
+                            type="number",
+                        ),
+                        class_name="w-full",
                     ),
-                    rx.el.input(
-                        default_value=(
-                            CalculatorState.income_coefficient * 100
-                        ).to_string(),
-                        on_change=CalculatorState.set_income_coefficient,
-                        class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500",
-                        type="number",
+                    rx.el.div(
+                        rx.el.label(
+                            "Social Security Base %",
+                            class_name="text-sm font-medium text-gray-700",
+                        ),
+                        rx.el.input(
+                            default_value=(
+                                CalculatorState.ss_base_coefficient * 100
+                            ).to_string(),
+                            on_change=CalculatorState.set_ss_base_coefficient,
+                            class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500",
+                            type="number",
+                        ),
+                        class_name="w-full",
                     ),
-                    class_name="w-full",
+                    rx.el.div(
+                        rx.tooltip(
+                            rx.el.label(
+                                "D8 Income Coefficient %",
+                                rx.icon(
+                                    "info", size=12, class_name="ml-1 text-gray-500"
+                                ),
+                                class_name="flex items-center text-sm font-medium text-gray-700 cursor-pointer",
+                            ),
+                            label="This coefficient is for the simplified tax regime.",
+                        ),
+                        rx.el.input(
+                            default_value=(
+                                CalculatorState.income_coefficient * 100
+                            ).to_string(),
+                            on_change=CalculatorState.set_income_coefficient,
+                            class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500",
+                            type="number",
+                        ),
+                        class_name="w-full",
+                    ),
+                    class_name="grid grid-cols-1 md:grid-cols-3 gap-4",
                 ),
-                class_name="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 mt-2",
+                class_name="pt-4 border-t border-gray-200 mt-2",
             ),
             None,
         ),

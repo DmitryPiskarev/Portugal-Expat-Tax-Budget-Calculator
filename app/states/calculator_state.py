@@ -19,6 +19,7 @@ class CalculatorState(rx.State):
         "others": 100.0,
     }
     ss_rate: float = 0.214
+    ss_base_coefficient: float = 0.7
     income_coefficient: float = 0.75
     show_advanced: bool = False
     irs_brackets: list[TaxBracket] = [
@@ -58,6 +59,14 @@ class CalculatorState(rx.State):
             self.ss_rate = 0.0
 
     @rx.event
+    def set_ss_base_coefficient(self, value: str):
+        try:
+            self.ss_base_coefficient = float(value) / 100 if value else 0.0
+        except ValueError as e:
+            logging.exception(f"Error parsing SS base coefficient: {e}")
+            self.ss_base_coefficient = 0.0
+
+    @rx.event
     def set_income_coefficient(self, value: str):
         try:
             self.income_coefficient = float(value) / 100 if value else 0.0
@@ -76,11 +85,11 @@ class CalculatorState(rx.State):
     @rx.var
     def taxable_income(self) -> float:
         g = self.annual_gross_income
-        return g * self.income_coefficient - g * 0.7 * self.ss_rate
+        return g * self.income_coefficient - g * self.ss_base_coefficient * self.ss_rate
 
     @rx.var
     def social_security_due(self) -> float:
-        return self.annual_gross_income * 0.7 * self.ss_rate
+        return self.annual_gross_income * self.ss_base_coefficient * self.ss_rate
 
     @rx.var
     def irs_due(self) -> float:
