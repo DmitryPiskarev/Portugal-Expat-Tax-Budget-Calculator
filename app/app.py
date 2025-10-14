@@ -6,6 +6,9 @@ from app.pages.sign_in import sign_in
 from app.pages.sign_up import sign_up
 from app.pages.tax_brackets import tax_brackets_page
 from app.pages.tax_info import tax_info_page
+from app.pages.admin import admin_page
+from app.components.footer import footer
+from app.states.admin_state import AdminState
 
 
 def navigation_item(text: str, href: str) -> rx.Component:
@@ -42,11 +45,16 @@ def app_header() -> rx.Component:
                     navigation_item("Calculator", "/"),
                     navigation_item("Tax Brackets", "/tax-brackets"),
                     navigation_item("Tax Info", "/tax-info"),
+                    rx.cond(
+                        AuthState.is_admin,
+                        navigation_item("Admin", "/admin"),
+                        rx.el.div(),
+                    ),
                     class_name="flex items-center gap-2",
                 ),
             ),
             rx.cond(
-                AuthState.in_session,
+                AuthState.is_logged_in,
                 rx.el.button(
                     "Logout",
                     on_click=AuthState.sign_out,
@@ -65,9 +73,9 @@ def app_header() -> rx.Component:
 
 
 def index() -> rx.Component:
-    return rx.el.main(
+    return rx.el.div(
         app_header(),
-        rx.el.div(
+        rx.el.main(
             rx.el.div(
                 rx.el.p(
                     "Estimate your net income and savings as a freelancer in Portugal under the D8 visa.",
@@ -91,7 +99,8 @@ def index() -> rx.Component:
             ),
             class_name="container mx-auto px-4",
         ),
-        class_name="font-['Lora'] bg-gray-50 min-h-screen",
+        footer(),
+        class_name="font-['Lora'] bg-gray-50 min-h-screen flex flex-col justify-between",
     )
 
 
@@ -111,3 +120,8 @@ app.add_page(sign_in, route="/sign-in")
 app.add_page(sign_up, route="/sign-up")
 app.add_page(tax_brackets_page, route="/tax-brackets", on_load=AuthState.check_session)
 app.add_page(tax_info_page, route="/tax-info", on_load=AuthState.check_session)
+app.add_page(
+    admin_page,
+    route="/admin",
+    on_load=[AuthState.check_admin, AdminState.on_load_admin],
+)
