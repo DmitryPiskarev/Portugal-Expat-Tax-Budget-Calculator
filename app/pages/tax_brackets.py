@@ -22,7 +22,7 @@ def tax_brackets_page() -> rx.Component:
                 class_name="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900",
             ),
             rx.el.td(
-                f"{str(bracket['rate'] * 100)}%",
+                str(bracket["rate"] * 100) + "%",
                 class_name="px-6 py-4 whitespace-nowrap text-sm text-gray-500",
             ),
             class_name="border-b border-gray-200",

@@ -65,9 +65,13 @@ def advanced_options() -> rx.Component:
                     class_name="w-full",
                 ),
                 rx.el.div(
-                    rx.el.label(
-                        "D8 Income Coefficient %",
-                        class_name="text-sm font-medium text-gray-700",
+                    rx.tooltip(
+                        rx.el.label(
+                            "D8 Income Coefficient %",
+                            rx.icon("info", size=12, class_name="ml-1 text-gray-500"),
+                            class_name="flex items-center text-sm font-medium text-gray-700 cursor-pointer",
+                        ),
+                        label="This coefficient is for the simplified tax regime.",
                     ),
                     rx.el.input(
                         default_value=(
