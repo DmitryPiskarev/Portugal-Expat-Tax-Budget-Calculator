@@ -3,7 +3,7 @@ from app.components.ui import card
 
 
 def tax_info_page() -> rx.Component:
-    from app.app import app_header
+    from app.app import app_header, footer
 
     def info_section(title: str, *content) -> rx.Component:
         return card(
@@ -89,5 +89,6 @@ def tax_info_page() -> rx.Component:
             ),
             class_name="container mx-auto px-4 py-8",
         ),
-        class_name="font-['Lora'] bg-gray-50 min-h-screen",
+        footer(),
+        class_name="font-['Lora'] bg-gray-50 min-h-screen flex flex-col",
     )

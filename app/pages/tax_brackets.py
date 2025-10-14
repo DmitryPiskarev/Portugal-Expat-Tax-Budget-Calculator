@@ -3,7 +3,7 @@ from app.states.calculator_state import CalculatorState
 
 
 def tax_brackets_page() -> rx.Component:
-    from app.app import app_header
+    from app.app import app_header, footer
 
     def bracket_row(bracket: dict, index: int) -> rx.Component:
         lower_bound = rx.cond(
@@ -59,5 +59,6 @@ def tax_brackets_page() -> rx.Component:
             ),
             class_name="container mx-auto px-4 py-8",
         ),
-        class_name="font-['Lora'] bg-gray-50 min-h-screen",
+        footer(),
+        class_name="font-['Lora'] bg-gray-50 min-h-screen flex flex-col",
     )

@@ -180,18 +180,31 @@ def tax_bracket_management_card() -> rx.Component:
 
 
 def admin_page() -> rx.Component:
-    from app.app import app_header
+    from app.app import app_header, footer
 
     return rx.el.div(
         app_header(),
-        rx.el.main(
-            rx.el.h1("Admin Panel", class_name="text-3xl font-bold text-gray-800 mb-6"),
-            rx.el.div(
-                user_management_card(),
-                tax_bracket_management_card(),
-                class_name="flex flex-col gap-8",
+        rx.cond(
+            AuthState.is_admin,
+            rx.el.main(
+                rx.el.h1(
+                    "Admin Panel", class_name="text-3xl font-bold text-gray-800 mb-6"
+                ),
+                rx.el.div(
+                    user_management_card(),
+                    tax_bracket_management_card(),
+                    class_name="flex flex-col gap-8",
+                ),
+                class_name="container mx-auto px-4 py-8",
             ),
-            class_name="container mx-auto px-4 py-8",
+            rx.el.main(
+                rx.el.div(
+                    rx.spinner(class_name="text-violet-500"),
+                    class_name="flex justify-center items-center h-64",
+                ),
+                class_name="container mx-auto px-4 py-8",
+            ),
         ),
-        class_name="font-['Lora'] bg-gray-50 min-h-screen",
+        footer(),
+        class_name="font-['Lora'] bg-gray-50 min-h-screen flex flex-col",
     )

@@ -100,7 +100,7 @@ def index() -> rx.Component:
             class_name="container mx-auto px-4",
         ),
         footer(),
-        class_name="font-['Lora'] bg-gray-50 min-h-screen flex flex-col justify-between",
+        class_name="font-['Lora'] bg-gray-50 min-h-screen flex flex-col",
     )
 
 

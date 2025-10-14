@@ -50,5 +50,7 @@ class AuthState(rx.State):
 
     @rx.event
     def check_admin(self):
-        if not (self.in_session and self.is_admin):
+        if not self.is_logged_in:
+            return rx.redirect("/sign-in")
+        if not self.is_admin:
             return rx.redirect("/")
