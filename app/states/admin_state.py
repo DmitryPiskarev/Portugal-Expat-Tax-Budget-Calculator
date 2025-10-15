@@ -1,7 +1,113 @@
+# import reflex as rx
+# from typing import TypedDict
+# import logging
+# from app.states.calculator_state import CalculatorState, TaxBracket
+
+
+# class User(TypedDict):
+#     id: int
+#     email: str
+#     is_admin: bool
+
+
+# class AdminState(rx.State):
+#     """Admin state for managing users and app settings."""
+
+#     users: list[User] = [
+#         {"id": 1, "email": "admin@reflex.com", "is_admin": True},
+#         {"id": 2, "email": "user@example.com", "is_admin": False},
+#     ]
+#     tax_brackets: list[TaxBracket] = []
+#     is_editing_bracket: bool = False
+#     editing_bracket_index: int = -1
+#     editing_bracket: TaxBracket = {"limit": 0, "rate": 0}
+
+#     @rx.event
+#     async def on_load_admin(self):
+#         """Load initial data for the admin panel."""
+#         calc_state = await self.get_state(CalculatorState)
+#         self.tax_brackets = calc_state.irs_brackets.copy()
+
+#     @rx.event
+#     def add_user(self, form_data: dict):
+#         """Add a new user."""
+#         email = form_data.get("email")
+#         if email and email not in [u["email"] for u in self.users]:
+#             new_id = max((u["id"] for u in self.users)) + 1 if self.users else 1
+#             self.users.append({"id": new_id, "email": email, "is_admin": False})
+#         else:
+#             return rx.toast("Email is invalid or already exists.", duration=3000)
+
+#     @rx.event
+#     def delete_user(self, user_id: int):
+#         """Delete a user."""
+#         self.users = [u for u in self.users if u["id"] != user_id]
+
+#     @rx.event
+#     def start_edit_bracket(self, index: int):
+#         """Start editing a tax bracket."""
+#         self.is_editing_bracket = True
+#         self.editing_bracket_index = index
+#         self.editing_bracket = self.tax_brackets[index].copy()
+
+#     @rx.event
+#     def handle_edit_bracket_change(self, field: str, value: str):
+#         """Handle changes in the bracket edit form."""
+#         try:
+#             self.editing_bracket[field] = (
+#                 float(value) / 100 if field == "rate" else float(value)
+#             )
+#         except ValueError as e:
+#             logging.exception(f"Error parsing bracket value: {e}")
+
+#     @rx.event
+#     def cancel_edit_bracket(self):
+#         """Cancel editing a tax bracket."""
+#         self.is_editing_bracket = False
+#         self.editing_bracket_index = -1
+#         self.editing_bracket = {"limit": 0, "rate": 0}
+
+#     @rx.event
+#     async def save_bracket(self):
+#         """Save the edited tax bracket and update the main state."""
+#         if self.is_editing_bracket and self.editing_bracket_index != -1:
+#             self.tax_brackets[self.editing_bracket_index] = self.editing_bracket
+#             self.is_editing_bracket = False
+#             self.editing_bracket_index = -1
+#             calc_state = await self.get_state(CalculatorState)
+#             calc_state.irs_brackets = self.tax_brackets
+#             return rx.toast("Tax bracket updated successfully!", duration=3000)
+
+#     @rx.event
+#     def add_new_bracket(self):
+#         """Add a new empty bracket to the list."""
+#         self.tax_brackets.append({"limit": 0.0, "rate": 0.0})
+#         self.start_edit_bracket(len(self.tax_brackets) - 1)
+
+#     @rx.event
+#     async def remove_bracket(self, index: int):
+#         """Remove a tax bracket."""
+#         if 0 <= index < len(self.tax_brackets):
+#             del self.tax_brackets[index]
+#             calc_state = await self.get_state(CalculatorState)
+#             calc_state.irs_brackets = self.tax_brackets
+#             return rx.toast("Tax bracket removed.", duration=3000)
+            
+#     @rx.event
+#     def toggle_user_role(self, user_id: int):
+#         """Toggle a user's admin role."""
+#         for u in self.users:
+#             if u["id"] == user_id:
+#                 u["is_admin"] = not u["is_admin"]
+#                 role = "Admin" if u["is_admin"] else "User"
+#                 return rx.toast(f"Role updated to {role}.", duration=2500)
+
+# app/states/admin_state.py
 import reflex as rx
 from typing import TypedDict
 import logging
 from app.states.calculator_state import CalculatorState, TaxBracket
+from app.db import get_db_connection
 
 
 class User(TypedDict):
@@ -13,10 +119,7 @@ class User(TypedDict):
 class AdminState(rx.State):
     """Admin state for managing users and app settings."""
 
-    users: list[User] = [
-        {"id": 1, "email": "admin@reflex.com", "is_admin": True},
-        {"id": 2, "email": "user@example.com", "is_admin": False},
-    ]
+    users: list[User] = []
     tax_brackets: list[TaxBracket] = []
     is_editing_bracket: bool = False
     editing_bracket_index: int = -1
@@ -28,31 +131,57 @@ class AdminState(rx.State):
         calc_state = await self.get_state(CalculatorState)
         self.tax_brackets = calc_state.irs_brackets.copy()
 
-    @rx.event
-    def add_user(self, form_data: dict):
-        """Add a new user."""
-        email = form_data.get("email")
-        if email and email not in [u["email"] for u in self.users]:
-            new_id = max((u["id"] for u in self.users)) + 1 if self.users else 1
-            self.users.append({"id": new_id, "email": email, "is_admin": False})
-        else:
-            return rx.toast("Email is invalid or already exists.", duration=3000)
+        # Load users from SQLite
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, email, is_admin FROM users ORDER BY id")
+        self.users = [
+            {"id": row[0], "email": row[1], "is_admin": bool(row[2])}
+            for row in cursor.fetchall()
+        ]
+        conn.close()
 
     @rx.event
     def delete_user(self, user_id: int):
-        """Delete a user."""
+        """Delete a user from state and database."""
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
+        conn.commit()
+        conn.close()
+
         self.users = [u for u in self.users if u["id"] != user_id]
+        return rx.toast("User deleted.", duration=2500)
+
+    @rx.event
+    def toggle_user_role(self, user_id: int):
+        """Toggle a user's admin role in state and database."""
+        for u in self.users:
+            if u["id"] == user_id:
+                u["is_admin"] = not u["is_admin"]
+
+                # Update DB
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                cursor.execute(
+                    "UPDATE users SET is_admin = ? WHERE id = ?", (int(u["is_admin"]), user_id)
+                )
+                conn.commit()
+                conn.close()
+
+                role = "Admin" if u["is_admin"] else "User"
+                return rx.toast(f"Role updated to {role}.", duration=2500)
+
+    # ---------- Tax bracket methods remain unchanged ----------
 
     @rx.event
     def start_edit_bracket(self, index: int):
-        """Start editing a tax bracket."""
         self.is_editing_bracket = True
         self.editing_bracket_index = index
         self.editing_bracket = self.tax_brackets[index].copy()
 
     @rx.event
     def handle_edit_bracket_change(self, field: str, value: str):
-        """Handle changes in the bracket edit form."""
         try:
             self.editing_bracket[field] = (
                 float(value) / 100 if field == "rate" else float(value)
@@ -62,14 +191,12 @@ class AdminState(rx.State):
 
     @rx.event
     def cancel_edit_bracket(self):
-        """Cancel editing a tax bracket."""
         self.is_editing_bracket = False
         self.editing_bracket_index = -1
         self.editing_bracket = {"limit": 0, "rate": 0}
 
     @rx.event
     async def save_bracket(self):
-        """Save the edited tax bracket and update the main state."""
         if self.is_editing_bracket and self.editing_bracket_index != -1:
             self.tax_brackets[self.editing_bracket_index] = self.editing_bracket
             self.is_editing_bracket = False
@@ -80,25 +207,14 @@ class AdminState(rx.State):
 
     @rx.event
     def add_new_bracket(self):
-        """Add a new empty bracket to the list."""
         self.tax_brackets.append({"limit": 0.0, "rate": 0.0})
         self.start_edit_bracket(len(self.tax_brackets) - 1)
 
     @rx.event
     async def remove_bracket(self, index: int):
-        """Remove a tax bracket."""
         if 0 <= index < len(self.tax_brackets):
             del self.tax_brackets[index]
             calc_state = await self.get_state(CalculatorState)
             calc_state.irs_brackets = self.tax_brackets
             return rx.toast("Tax bracket removed.", duration=3000)
-            
-    @rx.event
-    def toggle_user_role(self, user_id: int):
-        """Toggle a user's admin role."""
-        for u in self.users:
-            if u["id"] == user_id:
-                u["is_admin"] = not u["is_admin"]
-                role = "Admin" if u["is_admin"] else "User"
-                return rx.toast(f"Role updated to {role}.", duration=2500)
-                
+
