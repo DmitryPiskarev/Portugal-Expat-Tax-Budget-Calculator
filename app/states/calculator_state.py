@@ -201,6 +201,15 @@ class CalculatorState(rx.State):
     currency_to: str = "EUR"
     conversion_rate: float = 1.0
     converted_income: float = 0.0
+    conversion_amount: float = 0.0
+
+    @rx.event
+    def set_conversion_amount(self, val: str):
+        try:
+            self.conversion_amount = float(val) if val else 0.0
+        except ValueError as e:
+            logging.exception(f"Error parsing conversion amount: {e}")
+            self.conversion_amount = 0.0
 
     @rx.var
     def converted_income_text(self) -> str:
