@@ -12,10 +12,10 @@ def currency_conversion_block() -> rx.Component:
     return rx.el.div(
         rx.el.button(
             rx.el.div(
-                rx.icon("sliders-horizontal", size=16),
+                rx.icon("badge-cent", size=16),
                 "Currency Converter",
                 rx.icon(
-                    "arrows-right-left",
+                    "chevron-down",
                     size=16,
                     class_name=rx.cond(
                         CalculatorState.show_conversion,
