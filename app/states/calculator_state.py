@@ -23,6 +23,7 @@ class CalculatorState(rx.State):
     ss_base_coefficient: float = 0.7
     income_coefficient: float = 0.75
     show_advanced: bool = False
+    show_conversion: bool = False
     irs_brackets: list[TaxBracket] = [
         {"limit": 8059, "rate": 0.13},
         {"limit": 12160, "rate": 0.165},
@@ -202,6 +203,10 @@ class CalculatorState(rx.State):
     conversion_rate: float = 1.0
     converted_income: float = 0.0
     conversion_amount: float = 0.0
+
+    @rx.event
+    def toggle_conversion(self):
+        self.show_conversion = not self.show_conversion
 
     @rx.event
     def set_conversion_amount(self, val: str):
