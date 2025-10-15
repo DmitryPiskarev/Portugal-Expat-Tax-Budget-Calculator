@@ -111,32 +111,22 @@ def advanced_options() -> rx.Component:
     )
 
 
-def income_input() -> rx.Component:
-    return rx.el.div(
-        card(
-            rx.el.h2(
-                "Your Income & Tax",
-                class_name="text-lg font-semibold text-gray-800 mb-4",
-            ),
-            input_field(
-                label="Monthly Gross Income",
-                icon="landmark",
-                default_value=CalculatorState.gross_income.to_string(),
-                on_change=CalculatorState.set_gross_income,
-                type="number",
-                placeholder="e.g. 5000.00",
-                # 👇 We’ll override styling inside input_field using extra class_name
-                class_name=(
-                    "text-2xl font-semibold h-14 px-4 py-3 "
-                    "rounded-lg border border-gray-300 focus-visible:ring-2 "
-                    "focus-visible:ring-violet-500 transition-all"
-                ),
-            ),
-            advanced_options(),
-        ),
-        class_name="flex flex-col gap-4",
+def income_input() -> rx.Component: 
+    return rx.el.div( 
+        card( 
+            rx.el.h2( "Your Income & Tax", class_name="text-lg font-semibold text-gray-800 mb-4", ), 
+            input_field( 
+                label="Monthly Gross Income", 
+                icon="landmark", 
+                default_value=CalculatorState.gross_income.to_string(), 
+                on_change=CalculatorState.set_gross_income, 
+                type="number", 
+                placeholder="e.g. 5000.00", 
+            ), 
+            advanced_options(), 
+        ), 
+        class_name="flex flex-col gap-4", 
     )
-
 
 
 def expenses_input() -> rx.Component:
