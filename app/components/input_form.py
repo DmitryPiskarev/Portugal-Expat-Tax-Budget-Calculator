@@ -15,7 +15,7 @@ def currency_conversion_block() -> rx.Component:
                 rx.icon("sliders-horizontal", size=16),
                 "Currency Converter",
                 rx.icon(
-                    "chevron-down",
+                    "arrows-right-left",
                     size=16,
                     class_name=rx.cond(
                         CalculatorState.show_conversion,
