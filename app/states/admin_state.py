@@ -92,3 +92,13 @@ class AdminState(rx.State):
             calc_state = await self.get_state(CalculatorState)
             calc_state.irs_brackets = self.tax_brackets
             return rx.toast("Tax bracket removed.", duration=3000)
+            
+    @rx.event
+    def toggle_user_role(self, user_id: int):
+        """Toggle a user's admin role."""
+        for u in self.users:
+            if u["id"] == user_id:
+                u["is_admin"] = not u["is_admin"]
+                role = "Admin" if u["is_admin"] else "User"
+                return rx.toast(f"Role updated to {role}.", duration=2500)
+                
