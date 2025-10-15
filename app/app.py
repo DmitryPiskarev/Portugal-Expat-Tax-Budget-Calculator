@@ -90,7 +90,7 @@ def index() -> rx.Component:
                     class_name="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start",
                 ),
                 rx.el.div(class_name="py-4 lg:py-6"),
-                rx.divider(),
+                rx.divider(margin_bottom="1em"),
                 rx.el.div(
                     expenses_input(),
                     budget_output(),
