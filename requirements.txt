@@ -1,4 +1,5 @@
 
 reflex==0.8.14
 sqlalchemy
+sqlite3
 alembic
