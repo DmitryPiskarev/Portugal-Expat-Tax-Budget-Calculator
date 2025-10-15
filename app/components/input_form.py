@@ -25,7 +25,7 @@ def currency_conversion_block() -> rx.Component:
                 ),
                 class_name="flex items-center gap-2 font-semibold text-sm text-gray-600",
             ),
-            on_click=CalculatorState.show_conversion,
+            on_click=CalculatorState.toggle_conversion,  # ✅ use event, not bool
             class_name="w-full text-left py-2",
         ),
         rx.cond(
