@@ -1,4 +1,9 @@
 import reflex as rx
+from app.db import init_db
+
+# Initialize the database
+init_db()
+
 from app.states.auth_state import AuthState
 from app.components.input_form import income_input, expenses_input
 from app.components.output_display import output_display, budget_output
