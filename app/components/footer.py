@@ -49,11 +49,6 @@ def footer() -> rx.Component:
                         footer_link("Disclaimer", "#"),
                         footer_link("Privacy Policy", "#"),
                     ),
-                    footer_section(
-                        "Resources",
-                        footer_link("Reflex", "https://reflex.dev"),
-                        footer_link("Github", "#"),
-                    ),
                     class_name="grid grid-cols-2 md:grid-cols-3 gap-8",
                 ),
                 class_name="grid grid-cols-1 lg:grid-cols-2 gap-12",
