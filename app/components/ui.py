@@ -23,12 +23,12 @@ def metric_card(title: str, value: rx.Var | str, icon: str, **props) -> rx.Compo
 
 
 def input_field(label: str, icon: str, **props) -> rx.Component:
-    # Extract a custom class_name if provided, otherwise use the default
+    # Extract custom class_name if provided
     input_class = props.pop(
         "class_name",
         "flex h-10 w-full rounded-lg border border-gray-300 bg-transparent "
-        "pl-9 pr-7 py-2 text-sm transition-colors focus-visible:outline-none "
-        "focus-visible:ring-2 focus-visible:ring-violet-500"
+        "pl-9 pr-6 py-2 text-sm transition-colors focus-visible:outline-none "
+        "focus-visible:ring-2 focus-visible:ring-violet-500 text-gray-800",
     )
 
     return rx.el.div(
@@ -37,16 +37,23 @@ def input_field(label: str, icon: str, **props) -> rx.Component:
             class_name="text-sm font-medium text-gray-700 mb-1.5 block",
         ),
         rx.el.div(
+            # Left-side icon (calculator, home, etc.)
             rx.el.span(
                 rx.icon(icon, size=18, class_name="text-gray-400"),
                 class_name="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none",
             ),
+            # Right-side euro sign, placed *inside* input without spacing gap
             rx.el.span(
                 "€",
-                class_name="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500",
+                class_name=(
+                    "absolute inset-y-0 right-2 flex items-center "
+                    "text-gray-500 text-sm font-medium pointer-events-none"
+                ),
             ),
+            # Input field
             rx.el.input(
-                class_name=input_class,  # ✅ dynamic class name
+                class_name=input_class,
+                style={"paddingRight": "1.75rem"},  # 👈 ensures tight alignment
                 **props,
             ),
             class_name="relative",
