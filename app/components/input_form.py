@@ -125,11 +125,18 @@ def income_input() -> rx.Component:
                 on_change=CalculatorState.set_gross_income,
                 type="number",
                 placeholder="e.g. 5000.00",
+                # 👇 We’ll override styling inside input_field using extra class_name
+                class_name=(
+                    "text-2xl font-semibold h-14 px-4 py-3 "
+                    "rounded-lg border border-gray-300 focus-visible:ring-2 "
+                    "focus-visible:ring-violet-500 transition-all"
+                ),
             ),
             advanced_options(),
         ),
         class_name="flex flex-col gap-4",
     )
+
 
 
 def expenses_input() -> rx.Component:
