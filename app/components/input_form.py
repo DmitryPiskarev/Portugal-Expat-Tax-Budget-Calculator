@@ -4,7 +4,7 @@ from app.components.ui import card, input_field
 
 
 CURRENCY_CODES = [
-    "USD", "EUR", "GBP", "JPY", "RUR", "AUD", "CAD", "CHF", "CNY", "SEK", "NZD"
+    "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "CNY", "SEK", "NZD"
 ] 
 
 
