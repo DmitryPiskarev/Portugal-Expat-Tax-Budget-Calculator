@@ -122,6 +122,11 @@ def income_input() -> rx.Component:
                 on_change=CalculatorState.set_gross_income, 
                 type="number", 
                 placeholder="e.g. 5000.00", 
+                class_name=(
+                    "text-2xl font-semibold h-14 px-4 py-3 rounded-lg border border-gray-300 "
+                    "bg-transparent pl-9 pr-7 transition-colors focus-visible:outline-none "
+                    "focus-visible:ring-2 focus-visible:ring-violet-500"
+                ),
             ), 
             advanced_options(), 
         ), 
