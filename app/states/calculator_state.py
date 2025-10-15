@@ -202,6 +202,10 @@ class CalculatorState(rx.State):
     conversion_rate: float = 1.0
     converted_income: float = 0.0
 
+    @rx.var
+    def converted_income_text(self) -> str:
+        return f"{self.converted_income:.2f} {self.currency_to}"
+
     @rx.event
     def set_currency_from(self, val: str):
         self.currency_from = val
