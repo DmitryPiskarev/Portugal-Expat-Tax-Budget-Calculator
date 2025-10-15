@@ -32,7 +32,7 @@ def currency_conversion_block() -> rx.Component:
                 class_name="mt-2 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700",
             ),
             rx.el.p(
-                lambda: f"Converted Income: {CalculatorState.converted_income:.2f} {CalculatorState.currency_to}",
+                CalculatorState.converted_income_text,  # ← Use @rx.var instead of lambda
                 class_name="mt-2 text-gray-700 font-medium",
             ),
             class_name="grid grid-cols-1 md:grid-cols-3 gap-4",
