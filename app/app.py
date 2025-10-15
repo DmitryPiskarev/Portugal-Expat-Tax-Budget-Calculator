@@ -116,11 +116,11 @@ app = rx.App(
         ),
     ],
 )
-app.add_page(index, on_load=AuthState.check_session, route="/")
+app.add_page(index, route="/")
 app.add_page(sign_in, route="/sign-in")
 app.add_page(sign_up, route="/sign-up")
-app.add_page(tax_brackets_page, route="/tax-brackets", on_load=AuthState.check_session)
-app.add_page(tax_info_page, route="/tax-info", on_load=AuthState.check_session)
+app.add_page(tax_brackets_page, route="/tax-brackets")
+app.add_page(tax_info_page, route="/tax-info")
 app.add_page(
     admin_page,
     route="/admin",
