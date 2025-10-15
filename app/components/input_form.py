@@ -3,6 +3,11 @@ from app.states.calculator_state import CalculatorState
 from app.components.ui import card, input_field
 
 
+CURRENCY_CODES = [
+    "USD", "EUR", "GBP", "JPY", "RUB", "AUD", "CAD", "CHF", "CNY", "SEK", "NZD"
+] 
+
+
 def currency_conversion_block() -> rx.Component:
     return rx.el.div(
         rx.el.h3(
@@ -11,17 +16,28 @@ def currency_conversion_block() -> rx.Component:
         ),
         rx.el.div(
             rx.el.div(
-                rx.el.label("From Currency", class_name="text-sm font-medium text-gray-700"),
+                rx.el.label("Amount", class_name="text-sm font-medium text-gray-700"),
                 rx.el.input(
-                    default_value=CalculatorState.currency_from,
+                    type="number",
+                    default_value=str(CalculatorState.gross_income),
+                    on_change=CalculatorState.set_conversion_amount,
+                    class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
+                ),
+            ),
+            rx.el.div(
+                rx.el.label("From", class_name="text-sm font-medium text-gray-700"),
+                rx.el.select(
+                    [rx.el.option(code, value=code) for code in CURRENCY_CODES],
+                    value=CalculatorState.currency_from,
                     on_change=CalculatorState.set_currency_from,
                     class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
                 ),
             ),
             rx.el.div(
-                rx.el.label("To Currency", class_name="text-sm font-medium text-gray-700"),
-                rx.el.input(
-                    default_value=CalculatorState.currency_to,
+                rx.el.label("To", class_name="text-sm font-medium text-gray-700"),
+                rx.el.select(
+                    [rx.el.option(code, value=code) for code in CURRENCY_CODES],
+                    value=CalculatorState.currency_to,
                     on_change=CalculatorState.set_currency_to,
                     class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
                 ),
@@ -32,14 +48,13 @@ def currency_conversion_block() -> rx.Component:
                 class_name="mt-2 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700",
             ),
             rx.el.p(
-                CalculatorState.converted_income_text,  # ← Use @rx.var instead of lambda
+                CalculatorState.converted_income_text,
                 class_name="mt-2 text-gray-700 font-medium",
             ),
-            class_name="grid grid-cols-1 md:grid-cols-3 gap-4",
+            class_name="grid grid-cols-1 md:grid-cols-4 gap-4",
         ),
         class_name="pt-4 border-t border-gray-200 mt-2",
     )
-
 
 
 def expense_inputs() -> rx.Component:
