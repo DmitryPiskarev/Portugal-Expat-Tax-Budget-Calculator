@@ -107,7 +107,7 @@ import reflex as rx
 from typing import TypedDict
 import logging
 from app.states.calculator_state import CalculatorState, TaxBracket
-from app.db import get_db_connection
+from app.db import get_connection
 
 
 class User(TypedDict):
@@ -132,7 +132,7 @@ class AdminState(rx.State):
         self.tax_brackets = calc_state.irs_brackets.copy()
 
         # Load users from SQLite
-        conn = get_db_connection()
+        conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT id, email, is_admin FROM users ORDER BY id")
         self.users = [
@@ -144,7 +144,7 @@ class AdminState(rx.State):
     @rx.event
     def delete_user(self, user_id: int):
         """Delete a user from state and database."""
-        conn = get_db_connection()
+        conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
         conn.commit()
@@ -161,7 +161,7 @@ class AdminState(rx.State):
                 u["is_admin"] = not u["is_admin"]
 
                 # Update DB
-                conn = get_db_connection()
+                conn = get_connection()
                 cursor = conn.cursor()
                 cursor.execute(
                     "UPDATE users SET is_admin = ? WHERE id = ?", (int(u["is_admin"]), user_id)
