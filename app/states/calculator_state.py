@@ -211,6 +211,23 @@ class CalculatorState(rx.State):
             logging.exception(f"Error parsing conversion amount: {e}")
             self.conversion_amount = 0.0
 
+    @rx.event
+    async def fetch_conversion_rate(self):
+        """Fetch conversion rate from a free API"""
+        try:
+            async with httpx.AsyncClient() as client:
+                url = f"https://api.frankfurter.app/latest?from={self.currency_from}&to={self.currency_to}"
+                resp = await client.get(url)
+                data = resp.json()
+                self.conversion_rate = data["rates"][self.currency_to]
+                # Use conversion_amount if provided, otherwise default to gross_income
+                amount = self.conversion_amount if self.conversion_amount > 0 else self.gross_income
+                self.converted_income = self.conversion_rate * amount
+        except Exception as e:
+            print("Error fetching conversion rate:", e)
+            self.conversion_rate = 1.0
+            self.converted_income = 0.0
+
     @rx.var
     def converted_income_text(self) -> str:
         return f"{self.converted_income:.2f} {self.currency_to}"
@@ -222,17 +239,3 @@ class CalculatorState(rx.State):
     @rx.event
     def set_currency_to(self, val: str):
         self.currency_to = val
-
-    @rx.event
-    async def fetch_conversion_rate(self):
-        """Fetch conversion rate from a free API"""
-        try:
-            async with httpx.AsyncClient() as client:
-                url = f"https://api.frankfurter.app/latest?from={self.currency_from}&to={self.currency_to}"
-                resp = await client.get(url)
-                data = resp.json()
-                self.conversion_rate = data["rates"][self.currency_to]
-                self.converted_income = self.conversion_rate * float(self.gross_income)
-        except Exception as e:
-            print("Error fetching conversion rate:", e)
-            self.conversion_rate = 1.0
