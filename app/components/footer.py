@@ -1,4 +1,5 @@
 import reflex as rx
+import datetime
 
 
 def footer_link(text: str, href: str) -> rx.Component:
@@ -18,6 +19,7 @@ def footer_section(title: str, *links) -> rx.Component:
 
 
 def footer() -> rx.Component:
+    current_year = datetime.datetime.now().year
     return rx.el.footer(
         rx.el.div(
             rx.el.div(
@@ -59,10 +61,16 @@ def footer() -> rx.Component:
             rx.el.div(class_name="border-t border-gray-200 mt-12 pt-8"),
             rx.el.div(
                 rx.el.p(
-                    "© 2024 Portugal D8 Tax Calculator. Built with Reflex.",
+                    f"© {current_year} Portugal D8 Tax Calculator. Built by ",
+                    rx.el.a(
+                        "Dmitry Piskarev",
+                        href="https://www.linkedin.com/in/dmitry-piskarev/",
+                        target="_blank",
+                        class_name="text-blue-600 hover:underline",
+                    ),
                     class_name="text-sm text-gray-500",
                 ),
-                rx.el.div(class_name="flex items-center gap-4"),
+                class_name="flex flex-col items-center justify-center gap-2 py-4",
             ),
             class_name="container mx-auto px-6 lg:px-8",
         ),
