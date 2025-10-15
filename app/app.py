@@ -78,7 +78,7 @@ def index() -> rx.Component:
         rx.el.main(
             rx.el.div(
                 rx.el.p(
-                    "Estimate your net income and savings as a freelancer in Portugal under the D8 visa.",
+                    "Estimate your net income and savings in 🇵🇹 Portugal under the D8 visa.",
                     class_name="text-gray-500 mt-2 text-center",
                 ),
                 class_name="py-8",
