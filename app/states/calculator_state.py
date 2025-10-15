@@ -1,6 +1,7 @@
 import reflex as rx
 from typing import TypedDict
 import logging
+import httpx
 
 
 class TaxBracket(TypedDict):
@@ -195,3 +196,30 @@ class CalculatorState(rx.State):
                 }
             )
         return data
+
+    currency_from: str = "USD"
+    currency_to: str = "EUR"
+    conversion_rate: float = 1.0
+    converted_income: float = 0.0
+
+    @rx.event
+    def set_currency_from(self, val: str):
+        self.currency_from = val
+
+    @rx.event
+    def set_currency_to(self, val: str):
+        self.currency_to = val
+
+    @rx.event
+    async def fetch_conversion_rate(self):
+        """Fetch conversion rate from a free API"""
+        try:
+            async with httpx.AsyncClient() as client:
+                url = f"https://api.frankfurter.app/latest?from={self.currency_from}&to={self.currency_to}"
+                resp = await client.get(url)
+                data = resp.json()
+                self.conversion_rate = data["rates"][self.currency_to]
+                self.converted_income = self.conversion_rate * float(self.gross_income)
+        except Exception as e:
+            print("Error fetching conversion rate:", e)
+            self.conversion_rate = 1.0
