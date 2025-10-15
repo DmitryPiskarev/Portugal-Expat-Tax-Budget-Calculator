@@ -59,7 +59,7 @@
 # app/states/auth_state.py
 import reflex as rx
 import sqlite3
-from app.db import get_db_connection
+from app.db import get_connection
 
 class AuthState(rx.State):
     in_session: bool = False
@@ -75,7 +75,7 @@ class AuthState(rx.State):
         email = form_data["email"]
         password = form_data["password"]
 
-        conn = get_db_connection()
+        conn = get_connection()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE email = ?", (email,))
         if cursor.fetchone():
@@ -102,7 +102,7 @@ class AuthState(rx.State):
         email = form_data["email"]
         password = form_data["password"]
 
-        conn = get_db_connection()
+        conn = get_connection()
         cursor = conn.cursor()
         cursor.execute(
             "SELECT is_admin FROM users WHERE email = ? AND password = ?", (email, password)
