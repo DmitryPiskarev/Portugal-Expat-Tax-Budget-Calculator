@@ -45,11 +45,13 @@ class AuthState(rx.State):
 
     @rx.event
     def check_session(self):
-        if not self.in_session:
-            return rx.redirect("/sign-in")
+        """Allow anyone to access, even without session."""
+        # No redirect; public access
+        pass
 
     @rx.event
     def check_admin(self):
+        """Restrict admin panel to logged-in admins only."""
         if not self.is_logged_in:
             return rx.redirect("/sign-in")
         if not self.is_admin:
