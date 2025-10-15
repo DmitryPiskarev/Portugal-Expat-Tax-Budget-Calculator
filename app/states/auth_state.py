@@ -11,16 +11,38 @@ class AuthState(rx.State):
     def is_logged_in(self) -> bool:
         return self.in_session
 
+    # @rx.event
+    # def sign_up(self, form_data: dict):
+    #     if form_data["email"] in USERS:
+    #         yield rx.toast("Email already in use", duration=3000)
+    #         return
+    #     else:
+    #         USERS[form_data["email"]] = form_data["password"]
+    #         self.in_session = True
+    #         self.is_admin = form_data["email"] == "admin@reflex.com"
+    #         return rx.redirect("/")
     @rx.event
-    def sign_up(self, form_data: dict):
-        if form_data["email"] in USERS:
+    async def sign_up(self, form_data: dict):
+        from app.states.admin_state import AdminState  # ✅ import inside to avoid circular import
+    
+        email = form_data["email"]
+        password = form_data["password"]
+    
+        if email in USERS:
             yield rx.toast("Email already in use", duration=3000)
             return
-        else:
-            USERS[form_data["email"]] = form_data["password"]
-            self.in_session = True
-            self.is_admin = form_data["email"] == "admin@reflex.com"
-            return rx.redirect("/")
+    
+        USERS[email] = password
+        self.in_session = True
+        self.is_admin = email == "admin@reflex.com"
+    
+        # ✅ Add user to AdminState so it appears in the admin panel
+        admin_state = await self.get_state(AdminState)
+        new_id = max((u["id"] for u in admin_state.users), default=0) + 1
+        admin_state.users.append({"id": new_id, "email": email, "is_admin": self.is_admin})
+    
+        yield rx.toast("Account created successfully!", duration=3000)
+        return rx.redirect("/")
 
     @rx.event
     def sign_in(self, form_data: dict):
