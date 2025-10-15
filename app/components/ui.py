@@ -23,8 +23,19 @@ def metric_card(title: str, value: rx.Var | str, icon: str, **props) -> rx.Compo
 
 
 def input_field(label: str, icon: str, **props) -> rx.Component:
+    # Extract a custom class_name if provided, otherwise use the default
+    input_class = props.pop(
+        "class_name",
+        "flex h-10 w-full rounded-lg border border-gray-300 bg-transparent "
+        "pl-9 pr-7 py-2 text-sm transition-colors focus-visible:outline-none "
+        "focus-visible:ring-2 focus-visible:ring-violet-500"
+    )
+
     return rx.el.div(
-        rx.el.label(label, class_name="text-sm font-medium text-gray-700 mb-1.5 block"),
+        rx.el.label(
+            label,
+            class_name="text-sm font-medium text-gray-700 mb-1.5 block",
+        ),
         rx.el.div(
             rx.el.span(
                 rx.icon(icon, size=18, class_name="text-gray-400"),
@@ -35,7 +46,7 @@ def input_field(label: str, icon: str, **props) -> rx.Component:
                 class_name="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500",
             ),
             rx.el.input(
-                class_name="flex h-10 w-full rounded-lg border border-gray-300 bg-transparent pl-9 pr-7 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500",
+                class_name=input_class,  # ✅ dynamic class name
                 **props,
             ),
             class_name="relative",
