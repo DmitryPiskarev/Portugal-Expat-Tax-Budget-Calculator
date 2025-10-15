@@ -47,11 +47,19 @@ def user_management_card() -> rx.Component:
                             class_name="px-6 py-4 whitespace-nowrap text-sm text-gray-500",
                         ),
                         rx.el.td(
-                            rx.el.button(
-                                rx.icon("trash-2", size=16),
-                                on_click=lambda: AdminState.delete_user(user["id"]),
-                                disabled=user["is_admin"],
-                                class_name="text-red-600 hover:text-red-800 disabled:text-gray-300",
+                            rx.el.div(
+                                rx.el.button(
+                                    "Change Role",
+                                    on_click=lambda: AdminState.toggle_user_role(user["id"]),
+                                    class_name="text-blue-600 hover:text-blue-800 text-sm mr-4",
+                                ),
+                                rx.el.button(
+                                    rx.icon("trash-2", size=16),
+                                    on_click=lambda: AdminState.delete_user(user["id"]),
+                                    disabled=user["is_admin"],
+                                    class_name="text-red-600 hover:text-red-800 disabled:text-gray-300",
+                                ),
+                                class_name="flex justify-end items-center",
                             ),
                             class_name="px-6 py-4 whitespace-nowrap text-right text-sm font-medium",
                         ),
