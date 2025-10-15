@@ -10,48 +10,66 @@ CURRENCY_CODES = [
 
 def currency_conversion_block() -> rx.Component:
     return rx.el.div(
-        rx.el.h3(
-            "Currency Conversion",
-            class_name="text-lg font-semibold text-gray-800 mb-4",
+        rx.el.button(
+            rx.el.div(
+                rx.icon("sliders-horizontal", size=16),
+                "Currency Converter",
+                rx.icon(
+                    "chevron-down",
+                    size=16,
+                    class_name=rx.cond(
+                        CalculatorState.show_conversion,
+                        "transform rotate-180 transition-transform",
+                        "transition-transform",
+                    ),
+                ),
+                class_name="flex items-center gap-2 font-semibold text-sm text-gray-600",
+            ),
+            on_click=CalculatorState.show_conversion,
+            class_name="w-full text-left py-2",
         ),
-        rx.el.div(
+        rx.cond(
+            CalculatorState.show_conversion,
             rx.el.div(
-                rx.el.label("Amount", class_name="text-sm font-medium text-gray-700"),
-                rx.el.input(
-                    type="number",
-                    default_value=str(CalculatorState.gross_income),
-                    on_change=CalculatorState.set_conversion_amount,
-                    class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
+                rx.el.div(
+                    rx.el.label("Amount", class_name="text-sm font-medium text-gray-700"),
+                    rx.el.input(
+                        type="number",
+                        default_value=str(CalculatorState.gross_income),
+                        on_change=CalculatorState.set_conversion_amount,
+                        class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
+                    ),
                 ),
-            ),
-            rx.el.div(
-                rx.el.label("From", class_name="text-sm font-medium text-gray-700"),
-                rx.el.select(
-                    [rx.el.option(code, value=code) for code in CURRENCY_CODES],
-                    value=CalculatorState.currency_from,
-                    on_change=CalculatorState.set_currency_from,
-                    class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
+                rx.el.div(
+                    rx.el.label("From", class_name="text-sm font-medium text-gray-700"),
+                    rx.el.select(
+                        [rx.el.option(code, value=code) for code in CURRENCY_CODES],
+                        value=CalculatorState.currency_from,
+                        on_change=CalculatorState.set_currency_from,
+                        class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
+                    ),
                 ),
-            ),
-            rx.el.div(
-                rx.el.label("To", class_name="text-sm font-medium text-gray-700"),
-                rx.el.select(
-                    [rx.el.option(code, value=code) for code in CURRENCY_CODES],
-                    value=CalculatorState.currency_to,
-                    on_change=CalculatorState.set_currency_to,
-                    class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
+                rx.el.div(
+                    rx.el.label("To", class_name="text-sm font-medium text-gray-700"),
+                    rx.el.select(
+                        [rx.el.option(code, value=code) for code in CURRENCY_CODES],
+                        value=CalculatorState.currency_to,
+                        on_change=CalculatorState.set_currency_to,
+                        class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
+                    ),
                 ),
+                rx.el.button(
+                    "Convert",
+                    on_click=CalculatorState.fetch_conversion_rate,
+                    class_name="mt-2 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700",
+                ),
+                rx.el.p(
+                    CalculatorState.converted_income_text,
+                    class_name="mt-2 text-gray-700 font-medium",
+                ),
+                class_name="grid grid-cols-1 md:grid-cols-4 gap-4",
             ),
-            rx.el.button(
-                "Convert",
-                on_click=CalculatorState.fetch_conversion_rate,
-                class_name="mt-2 px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700",
-            ),
-            rx.el.p(
-                CalculatorState.converted_income_text,
-                class_name="mt-2 text-gray-700 font-medium",
-            ),
-            class_name="grid grid-cols-1 md:grid-cols-4 gap-4",
+            None,
         ),
         class_name="pt-4 border-t border-gray-200 mt-2",
     )
