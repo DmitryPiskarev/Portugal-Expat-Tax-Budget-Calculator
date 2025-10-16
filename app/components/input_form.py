@@ -191,23 +191,61 @@ def advanced_options() -> rx.Component:
     )
 
 
+# def income_input() -> rx.Component:
+#     return rx.el.div(
+#         card(
+#             rx.el.h2(
+#                 "Your Income & Tax",
+#                 class_name="text-lg font-semibold text-gray-800 mb-4",
+#             ),
+#             input_field(
+#                 label="Monthly Gross Income",
+#                 icon="landmark",
+#                 default_value=CalculatorState.gross_income.to_string(),
+#                 on_change=CalculatorState.set_gross_income,
+#                 type="number",
+#                 placeholder="e.g. 5000.00",
+#             ),
+#             advanced_options(),
+#             currency_conversion_block(),
+#         ),
+#         class_name="flex flex-col gap-4",
+#     )
 def income_input() -> rx.Component:
     return rx.el.div(
         card(
+            # Header
             rx.el.h2(
                 "Your Income & Tax",
-                class_name="text-lg font-semibold text-gray-800 mb-4",
+                class_name="text-xl font-semibold text-gray-800 mb-3",
             ),
-            input_field(
-                label="Monthly Gross Income",
-                icon="landmark",
-                default_value=CalculatorState.gross_income.to_string(),
-                on_change=CalculatorState.set_gross_income,
-                type="number",
-                placeholder="e.g. 5000.00",
+            rx.el.p(
+                "Start by entering your monthly gross income — all other calculations will be based on this value.",
+                class_name="text-sm text-gray-500 mb-4",
             ),
-            advanced_options(),
-            currency_conversion_block(),
+
+            # Highlighted main input
+            rx.el.div(
+                input_field(
+                    label="💰 Monthly Gross Income",
+                    icon="landmark",
+                    default_value=CalculatorState.gross_income.to_string(),
+                    on_change=CalculatorState.set_gross_income,
+                    type="number",
+                    placeholder="e.g. 5000.00",
+                ),
+                class_name="p-3 rounded-xl bg-violet-50 border border-violet-100 shadow-sm",
+            ),
+
+            # Other optional tools
+            rx.el.div(
+                advanced_options(),
+                class_name="mt-3",
+            ),
+            rx.el.div(
+                currency_conversion_block(),
+                class_name="mt-2",
+            ),
         ),
         class_name="flex flex-col gap-4",
     )
