@@ -256,20 +256,72 @@ class CalculatorState(rx.State):
 
     @rx.event
     async def fetch_cost_of_living(self):
-        """Fetch estimated expenses for selected city."""
+        """Fetch estimated expenses for selected city, or use fallback dataset."""
         self.is_fetching_city_data = True
         try:
             async with httpx.AsyncClient() as client:
-                # Example using a free open JSON (replace if you have your own)
                 url = f"https://cost-of-living.data.netlify.app/{self.city.lower()}.json"
                 resp = await client.get(url)
                 if resp.status_code == 200:
                     data = resp.json()
-                    # Expecting structure like: {"housing": 1200, "food": 400, ...}
+                    # Expecting structure like {"housing": 1200, "food": 400, ...}
                     for category in self.expenses.keys():
                         if category in data:
                             self.expenses[category] = float(data[category])
+                    print(f"Fetched live data for {self.city}")
+                    return  # ✅ If live data works, stop here
+    
         except Exception as e:
-            print(f"Error fetching cost of living for {self.city}: {e}")
-        finally:
-            self.is_fetching_city_data = False
+            print(f"Error fetching live cost of living data: {e}")
+    
+        # 🪣 Fallback static dataset (only used if API fails or city not found)
+        default_data = {
+            "Lisbon": {
+                "housing": 1400,
+                "food": 450,
+                "transport": 150,
+                "utilities": 130,
+                "leisure": 250,
+                "others": 100,
+            },
+            "Porto": {
+                "housing": 1100,
+                "food": 400,
+                "transport": 120,
+                "utilities": 110,
+                "leisure": 230,
+                "others": 90,
+            },
+            "Faro": {
+                "housing": 1000,
+                "food": 380,
+                "transport": 110,
+                "utilities": 100,
+                "leisure": 220,
+                "others": 90,
+            },
+            "Madeira": {
+                "housing": 950,
+                "food": 370,
+                "transport": 100,
+                "utilities": 90,
+                "leisure": 200,
+                "others": 80,
+            },
+            "Coimbra": {
+                "housing": 900,
+                "food": 360,
+                "transport": 100,
+                "utilities": 90,
+                "leisure": 190,
+                "others": 80,
+            },
+        }
+    
+        if self.city in default_data:
+            self.expenses.update(default_data[self.city])
+            print(f"Applied fallback data for {self.city}")
+        else:
+            print(f"No data found for {self.city}, keeping existing expenses.")
+    
+        self.is_fetching_city_data = False
