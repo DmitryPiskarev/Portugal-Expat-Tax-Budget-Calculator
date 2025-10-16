@@ -37,6 +37,11 @@ class CalculatorState(rx.State):
     ]
 
     @rx.event
+    async def on_load(self):
+        """Run once when app starts — ensures expenses come from live/fallback data."""
+        await self.fetch_cost_of_living()
+
+    @rx.event
     def set_gross_income(self, value: str):
         try:
             self.gross_income = float(value) if value else 0.0
