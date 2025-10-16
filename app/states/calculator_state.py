@@ -36,9 +36,9 @@ class CalculatorState(rx.State):
         {"limit": float("inf"), "rate": 0.48},
     ]
 
-    @rx.event
-    async def on_load(self):
-        """Run once when app starts — ensures expenses come from live/fallback data."""
+    @rx.lifecycle
+    async def on_mount(self):
+        """Called automatically when this component/state is mounted."""
         await self.fetch_cost_of_living()
 
     @rx.event
