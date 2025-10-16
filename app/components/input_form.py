@@ -84,20 +84,46 @@ def expense_inputs() -> rx.Component:
         ("leisure", "martini"),
         ("others", "ellipsis"),
     ]
+
     return rx.el.div(
+        rx.el.div(
+            rx.el.label(
+                "Select City (auto-fills average expenses)",
+                class_name="text-sm font-medium text-gray-700",
+            ),
+            rx.el.select(
+                rx.foreach(
+                    CalculatorState.available_cities,
+                    lambda city: rx.el.option(city, value=city)
+                ),
+                value=CalculatorState.city,
+                on_change=CalculatorState.set_city,
+                class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
+            ),
+            rx.cond(
+                CalculatorState.is_fetching_city_data,
+                rx.el.p(
+                    "Fetching cost of living data…",
+                    class_name="text-xs text-gray-500 mt-1 italic",
+                ),
+                None,
+            ),
+            class_name="mb-4",
+        ),
         rx.foreach(
             expense_items,
             lambda item: input_field(
                 label=item[0].capitalize(),
                 icon=item[1],
                 default_value=CalculatorState.expenses[item[0]].to_string(),
-                on_change=lambda val: CalculatorState.set_expense(item[0], val),
+                on_change=lambda val, key=item[0]: CalculatorState.set_expense(key, val),
                 type="number",
                 placeholder=f"e.g. {CalculatorState.expenses[item[0]]:.2f}",
             ),
         ),
         class_name="grid grid-cols-2 gap-4",
     )
+
 
 
 def advanced_options() -> rx.Component:
