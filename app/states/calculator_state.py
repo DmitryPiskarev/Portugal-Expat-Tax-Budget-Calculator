@@ -244,3 +244,32 @@ class CalculatorState(rx.State):
     @rx.event
     def set_currency_to(self, val: str):
         self.currency_to = val
+
+    city: str = "Lisbon"
+    available_cities = ["Lisbon", "Porto", "Faro", "Madeira", "Coimbra"]
+    is_fetching_city_data: bool = False
+
+    @rx.event
+    async def set_city(self, val: str):
+        self.city = val
+        await self.fetch_cost_of_living()
+
+    @rx.event
+    async def fetch_cost_of_living(self):
+        """Fetch estimated expenses for selected city."""
+        self.is_fetching_city_data = True
+        try:
+            async with httpx.AsyncClient() as client:
+                # Example using a free open JSON (replace if you have your own)
+                url = f"https://cost-of-living.data.netlify.app/{self.city.lower()}.json"
+                resp = await client.get(url)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    # Expecting structure like: {"housing": 1200, "food": 400, ...}
+                    for category in self.expenses.keys():
+                        if category in data:
+                            self.expenses[category] = float(data[category])
+        except Exception as e:
+            print(f"Error fetching cost of living for {self.city}: {e}")
+        finally:
+            self.is_fetching_city_data = False
