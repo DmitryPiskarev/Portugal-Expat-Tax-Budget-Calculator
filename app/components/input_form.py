@@ -214,6 +214,10 @@ def expenses_input() -> rx.Component:
         rx.el.h3(
             "Monthly Expenses", class_name="text-lg font-semibold text-gray-800 mb-4"
         ),
+        rx.el.p(
+            "Estimates are based on publicly available cost-of-living statistics and may not reflect your exact expenses.",
+            class_name="text-xs text-gray-500 italic mb-4",
+        ),
         rx.el.div(
             rx.el.label("Select City", class_name="text-sm font-medium text-gray-700"),
             rx.el.select(
