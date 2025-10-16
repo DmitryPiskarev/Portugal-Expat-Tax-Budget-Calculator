@@ -36,11 +36,6 @@ class CalculatorState(rx.State):
         {"limit": float("inf"), "rate": 0.48},
     ]
 
-    @rx.lifecycle
-    async def on_mount(self):
-        """Called automatically when this component/state is mounted."""
-        await self.fetch_cost_of_living()
-
     @rx.event
     def set_gross_income(self, value: str):
         try:
