@@ -80,6 +80,7 @@ def app_header() -> rx.Component:
 def index() -> rx.Component:
     return rx.el.div(
         app_header(),
+        rx.window_event("load", CalculatorState.on_load),
         rx.el.main(
             rx.el.div(
                 rx.el.p(
