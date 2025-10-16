@@ -220,7 +220,7 @@ def expenses_input() -> rx.Component:
                 value=CalculatorState.city,
                 on_change=CalculatorState.set_city,
                 class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
-            )
+            ),
             rx.cond(
                 CalculatorState.is_fetching_city_data,
                 rx.el.p("Fetching data...", class_name="text-sm text-gray-500 mt-1"),
