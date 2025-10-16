@@ -179,6 +179,10 @@ def advanced_options() -> rx.Component:
                     ),
                     class_name="grid grid-cols-1 md:grid-cols-3 gap-4",
                 ),
+                rx.el.p(
+                    "These parameters are for advanced users. Adjust them only if you understand local tax and contribution rules — default values are based on typical Portuguese rates.",
+                    class_name="text-xs text-gray-500 italic mt-3",
+                ),
                 class_name="pt-4 border-t border-gray-200 mt-2",
             ),
             None,
