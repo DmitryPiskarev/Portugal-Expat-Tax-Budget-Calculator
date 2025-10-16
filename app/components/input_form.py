@@ -210,5 +210,20 @@ def expenses_input() -> rx.Component:
         rx.el.h3(
             "Monthly Expenses", class_name="text-lg font-semibold text-gray-800 mb-4"
         ),
+        rx.el.div(
+            rx.el.label("Select City", class_name="text-sm font-medium text-gray-700"),
+            rx.el.select(
+                [rx.el.option(city, value=city) for city in CalculatorState.available_cities],
+                value=CalculatorState.city,
+                on_change=CalculatorState.set_city,
+                class_name="w-full mt-1.5 flex h-10 rounded-lg border border-gray-300 px-3 py-2 text-sm",
+            ),
+            rx.cond(
+                CalculatorState.is_fetching_city_data,
+                rx.el.p("Fetching data...", class_name="text-sm text-gray-500 mt-1"),
+                rx.el.p(f"Using averages for {CalculatorState.city}", class_name="text-sm text-gray-500 mt-1")
+            ),
+            class_name="mb-4",
+        ),
         expense_inputs(),
     )
