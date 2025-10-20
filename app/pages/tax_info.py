@@ -12,6 +12,18 @@ def tax_info_page() -> rx.Component:
             class_name="mb-6",
         )
 
+    def external_link(url: str, text: str) -> rx.Component:
+        return rx.el.a(
+            rx.el.div(
+                rx.icon("external-link", size=14, class_name="text-violet-600"),
+                rx.el.span(text),
+                class_name="flex items-center gap-1 text-violet-600 hover:underline font-medium",
+            ),
+            href=url,
+            target="_blank",
+            rel="noopener noreferrer",
+        )
+
     return rx.el.div(
         app_header(),
         rx.el.main(
@@ -79,6 +91,64 @@ def tax_info_page() -> rx.Component:
                 ),
                 rx.el.p(
                     "The simplified regime is generally available for freelancers with an annual gross income below €200,000. Above this threshold, organized accounting is usually required."
+                ),
+            ),
+            # ✅ New section: official visa portals and guidance
+            info_section(
+                "Visa Registration & Application Portals",
+                rx.el.p(
+                    "To start your D-type (Digital Nomad) visa application, use the official Portuguese Ministry of Foreign Affairs platforms below. These are the legitimate systems where you register, upload documents, and book your consular appointments."
+                ),
+                rx.el.ul(
+                    rx.el.li(
+                        rx.text.strong("E-Visa Portal: "),
+                        "Create your account (‘Registo Único’), confirm your token, log in, and choose the National (D) visa type. ",
+                        external_link(
+                            "https://pedidodevistos.mne.gov.pt/",
+                            "pedidodevistos.mne.gov.pt",
+                        ),
+                        rx.el.p(
+                            "After logging in, select your Consulate (e.g., Moscow / Russian Federation) and upload the required documents for your Digital Nomad visa.",
+                            class_name="mt-1 text-gray-500",
+                        ),
+                    ),
+                    rx.el.li(
+                        rx.text.strong("Consular Appointments System: "),
+                        "If your Consulate requires an in-person appointment for document drop-off, use the scheduling portal: ",
+                        external_link(
+                            "https://agendamentos.mne.gov.pt/en/register",
+                            "agendamentos.mne.gov.pt",
+                        ),
+                        rx.el.p(
+                            "Register with your basic info (name, email, phone), then book or confirm your appointment slot.",
+                            class_name="mt-1 text-gray-500",
+                        ),
+                    ),
+                    rx.el.li(
+                        rx.text.strong("General Visa Guidance: "),
+                        "Official Ministry page describing procedures and required documents: ",
+                        external_link(
+                            "https://vistos.mne.gov.pt/",
+                            "vistos.mne.gov.pt",
+                        ),
+                    ),
+                    class_name="list-disc list-inside space-y-3 mt-3",
+                ),
+                rx.el.div(
+                    rx.el.p(
+                        "If you see a message like “this visa type is not available for your consular post,” slots might be temporarily closed. Try again later or email the Consular Section in Moscow at ",
+                        rx.el.a(
+                            "sconsular.moscovo@mne.pt",
+                            href="mailto:sconsular.moscovo@mne.pt",
+                            class_name="text-violet-600 hover:underline",
+                        ),
+                        " for guidance.",
+                    ),
+                    class_name="bg-violet-50 border border-violet-200 rounded-lg p-3 mt-3 text-sm text-gray-700",
+                ),
+                rx.el.p(
+                    "Before you register, make sure you have: passport scans, proof of remote income, health insurance, CV/cover letter, and passport photo files in the required format.",
+                    class_name="mt-3 text-gray-600 italic",
                 ),
             ),
             info_section(
