@@ -151,6 +151,61 @@ def tax_info_page() -> rx.Component:
                     class_name="mt-3 text-gray-600 italic",
                 ),
             ),
+                        info_section(
+                "Applicants Outside Russia (US / UK / Other Countries)",
+                rx.el.p(
+                    "If you’re applying from another country (for example the US or UK), the same visa type applies but the submission method and required documents vary slightly by region."
+                ),
+                rx.el.ul(
+                    rx.el.li(
+                        rx.text.strong("United States: "),
+                        "Applications are made through the ",
+                        rx.el.a(
+                            "VFS Global Portugal centres",
+                            href="https://www.vfsglobal.com/one-pager/portugal/usa/english/",
+                            target="_blank",
+                            class_name="text-blue-600 hover:underline",
+                        ),
+                        ". All D-type visa applications must be submitted in person."
+                    ),
+                    rx.el.li(
+                        rx.text.strong("United Kingdom: "),
+                        "Apply via your local Portuguese Consulate. Working remotely for a non-Portuguese company is allowed under the D8 regime, but always check your regional Consulate’s website for availability.",
+                    ),
+                    rx.el.li(
+                        rx.text.strong("Other Countries: "),
+                        "The same E-Visa portal is used. Contact your nearest Portuguese Embassy or Consulate if the D-type visa option doesn’t appear for your jurisdiction.",
+                    ),
+                    class_name="list-disc list-inside space-y-2 mt-2",
+                ),
+                rx.el.p(
+                    "Before applying, ensure you have: passport scan, proof of income, health insurance, criminal record certificate (with apostille if applicable), and accommodation proof. Processing time can take 4–8 weeks or longer depending on your consular post."
+                ),
+                rx.el.p(
+                    "Helpful sources: ",
+                    rx.el.a(
+                        "gov.uk (for UK applicants)",
+                        href="https://www.gov.uk/guidance/travel-to-portugal-for-work",
+                        target="_blank",
+                        class_name="text-blue-600 hover:underline",
+                    ),
+                    ", ",
+                    rx.el.a(
+                        "Wise D8 Visa Guide",
+                        href="https://wise.com/us/blog/portugal-d8-visa",
+                        target="_blank",
+                        class_name="text-blue-600 hover:underline",
+                    ),
+                    ", ",
+                    rx.el.a(
+                        "OysterHR D8 Overview",
+                        href="https://www.oysterhr.com/library/portugal-digital-nomad-visa",
+                        target="_blank",
+                        class_name="text-blue-600 hover:underline",
+                    ),
+                    ".",
+                ),
+            ),
             info_section(
                 "Disclaimer",
                 rx.el.p(
