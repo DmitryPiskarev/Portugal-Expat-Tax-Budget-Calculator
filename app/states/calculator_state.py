@@ -10,7 +10,7 @@ class TaxBracket(TypedDict):
 
 
 class CalculatorState(rx.State):
-    gross_income: float = 5000.0
+    gross_income: float = 0.0
     expenses: dict[str, float] = {
         "housing": 1200.0,
         "food": 400.0,
