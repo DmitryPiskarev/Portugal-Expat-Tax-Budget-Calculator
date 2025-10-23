@@ -232,7 +232,7 @@ def income_input() -> rx.Component:
                     default_value=CalculatorState.gross_income.to_string(),
                     on_change=CalculatorState.set_gross_income,
                     type="number",
-                    placeholder="e.g. 5000.00",
+                    placeholder="e.g. 3550.00",
                 ),
                 class_name="p-3 rounded-xl bg-violet-50 border border-violet-100 shadow-sm",
             ),
